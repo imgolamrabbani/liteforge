@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — LiteForge</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html">⚡ LiteForge</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="docs.html">Docs</a>
+        <a href="terms.html">Terms</a>
+        <button id="theme-toggle" class="theme-btn" type="button">Light Mode</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container prose">
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> November 27, 2026</p>
+    <p>LiteForge operates on a strict <strong>zero-telemetry, 100% local-first</strong> architecture.</p>
+
+    <h2>1. Zero Telemetry &amp; Zero Database Upload</h2>
+    <p>LiteForge does <strong>not</strong> collect, log, or transmit your SQLite files, schemas, queries, row data, usage analytics, or crash reports. All WebAssembly execution happens locally in memory.</p>
+
+    <h2>2. Outbound Network Requests</h2>
+    <p>LiteForge makes <strong>zero outbound network requests</strong> unless you explicitly activate a Polar.sh Pro license key, in which case it communicates only with <code>https://api.polar.sh/v1/customer-portal/license-keys/*</code> to activate, validate (every 72 hours when online), or deactivate your key.</p>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2026 LiteForge</span>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="docs.html">Docs</a>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

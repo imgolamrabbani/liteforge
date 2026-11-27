@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1280px; height: 800px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #14171F; color: #E2E8F0; overflow: hidden;
+  }
+  .shell { display: grid; grid-template-rows: 52px 1fr 28px; height: 800px; }
+  .topbar {
+    background: #1E293B; border-bottom: 1px solid #334155;
+    padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .pro-tag {
+    background: linear-gradient(90deg, #38BDF8, #818CF8);
+    color: #0F172A; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 4px;
+  }
+  .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; padding: 22px 24px; }
+  .panel { background: #1E293B; border: 1px solid #334155; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .panel-hdr {
+    padding: 14px 18px; background: #243247; border-bottom: 1px solid #334155;
+    display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px;
+  }
+  .erd-canvas { padding: 24px; display: flex; gap: 22px; align-items: flex-start; flex: 1; background: #0F172A; }
+  .erd-box {
+    flex: 1; background: #1E293B; border: 1px solid #38BDF8; border-radius: 10px; overflow: hidden;
+  }
+  .erd-title { background: #1E3A5F; padding: 9px 12px; font-weight: 700; font-size: 13px; color: #7DD3FC; }
+  .erd-col { padding: 7px 12px; border-bottom: 1px solid #293548; font-family: ui-monospace, monospace; font-size: 12px; display: flex; justify-content: space-between; }
+  .pk { color: #FBBF24; font-weight: 700; }
+  .fk { color: #34D399; font-weight: 700; }
+  .sql-preview {
+    padding: 18px; font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.65;
+    background: #0B1020; color: #E2E8F0; flex: 1;
+  }
+  .btn-commit { background: #10B981; color: #06281E; font-weight: 700; padding: 7px 14px; border-radius: 6px; font-size: 12.5px; }
+  .statusbar { background: #0F172A; border-top: 1px solid #334155; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #94A3B8; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px;font-weight:700">
+      <span>LiteForge — Visual Schema &amp; ERD + Transactional Inline Editor</span>
+      <span class="pro-tag">PRO</span>
+    </div>
+    <span class="btn-commit">✓ Apply Staged Edits (Atomic Write-Back)</span>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-hdr">
+        <span>Foreign-Key ERD Inspector (app.sqlite)</span>
+        <span style="color:#7DD3FC;font-size:12px">3 tables · 2 FK edges</span>
+      </div>
+      <div class="erd-canvas">
+        <div class="erd-box">
+          <div class="erd-title">users</div>
+          <div class="erd-col"><span><span class="pk">PK</span> id</span><span>TEXT</span></div>
+          <div class="erd-col"><span>email</span><span>TEXT</span></div>
+          <div class="erd-col"><span>role</span><span>TEXT</span></div>
+        </div>
+        <div class="erd-box" style="border-color:#818CF8">
+          <div class="erd-title" style="background:#2E295E;color:#C4B5FD">orders</div>
+          <div class="erd-col"><span><span class="pk">PK</span> id</span><span>TEXT</span></div>
+          <div class="erd-col"><span><span class="fk">FK</span> user_id → users.id</span><span>TEXT</span></div>
+          <div class="erd-col"><span>total_cents</span><span>INTEGER</span></div>
+        </div>
+        <div class="erd-box" style="border-color:#34D399">
+          <div class="erd-title" style="background:#134E4A;color:#6EE7B7">order_items</div>
+          <div class="erd-col"><span><span class="pk">PK</span> id</span><span>INTEGER</span></div>
+          <div class="erd-col"><span><span class="fk">FK</span> order_id → orders.id</span><span>TEXT</span></div>
+          <div class="erd-col"><span>sku</span><span>TEXT</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr">
+        <span>Staged Edit SQL Diff Preview</span>
+        <span style="color:#FBBF24;font-size:12px">2 staged changes</span>
+      </div>
+      <pre class="sql-preview">BEGIN TRANSACTION;
+
+-- Cell Update (users.rowid = 2)
+UPDATE "users"
+   SET "role" = 'admin'
+ WHERE "rowid" = 2;
+
+-- Row Insert (users)
+INSERT INTO "users" ("id", "email", "role")
+VALUES ('usr_06', 'katherine@acme.dev', 'editor');
+
+COMMIT;
+
+-- Atomic temp-file write-back verified:
+-- app.sqlite.tmp -> rename -> app.sqlite</pre>
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <span>LiteForge Pro · Inline Edit &amp; FK ERD</span>
+    <span>Transactional BEGIN/COMMIT · Zero Data Loss</span>
+  </div>
+</div>
+</body>
+</html>

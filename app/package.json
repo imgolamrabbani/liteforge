@@ -1,0 +1,183 @@
+{
+  "name": "liteforge",
+  "displayName": "LiteForge — Zero-Dependency WASM SQLite Studio",
+  "description": "Zero-dependency WebAssembly SQLite Studio for VS Code, Remote-SSH, WSL & Codespaces. Browse, query, edit, inspect FK ERDs, diff schemas & dump .sqlite/.db files locally with zero native binaries.",
+  "version": "1.0.0",
+  "publisher": "caliberhttp",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "homepage": "https://imgolamrabbani.github.io/liteforge/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imgolamrabbani/liteforge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/imgolamrabbani/liteforge/issues"
+  },
+  "qna": "https://github.com/imgolamrabbani/liteforge/discussions",
+  "categories": [
+    "Other",
+    "Data Science",
+    "Visualization"
+  ],
+  "keywords": [
+    "sqlite",
+    "sqlite viewer",
+    "database",
+    "sql",
+    "wasm",
+    "db",
+    "erd",
+    "schema diff",
+    "remote ssh"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "activationEvents": [
+    "onCustomEditor:liteforge.sqliteEditor",
+    "onView:liteforge.databases",
+    "onCommand:liteforge.openDatabase",
+    "onCommand:liteforge.compareDatabases"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "liteforge.sqliteEditor",
+        "displayName": "LiteForge SQLite Studio",
+        "selector": [
+          { "filenamePattern": "*.db" },
+          { "filenamePattern": "*.sqlite" },
+          { "filenamePattern": "*.sqlite3" },
+          { "filenamePattern": "*.db3" },
+          { "filenamePattern": "*.s3db" }
+        ],
+        "priority": "default"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "liteforge",
+          "title": "LiteForge SQLite",
+          "icon": "media/activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "liteforge": [
+        {
+          "id": "liteforge.databases",
+          "name": "SQLite Databases"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "liteforge.databases",
+        "contents": "No `.sqlite` or `.db` files found in this workspace.\n[Open SQLite Database File](command:liteforge.openDatabase)\n[Compare Two Databases (Pro)](command:liteforge.compareDatabases)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "liteforge.openDatabase",
+        "title": "Open SQLite Database",
+        "category": "LiteForge",
+        "icon": "$(database)"
+      },
+      {
+        "command": "liteforge.refreshDatabases",
+        "title": "Refresh Databases",
+        "category": "LiteForge",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "liteforge.compareDatabases",
+        "title": "Compare Two SQLite Databases (Pro)",
+        "category": "LiteForge",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "liteforge.activateLicense",
+        "title": "Activate Pro License",
+        "category": "LiteForge"
+      },
+      {
+        "command": "liteforge.deactivateLicense",
+        "title": "Deactivate Pro License",
+        "category": "LiteForge"
+      },
+      {
+        "command": "liteforge.showLicenseStatus",
+        "title": "License Status",
+        "category": "LiteForge"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "liteforge.openDatabase",
+          "when": "view == liteforge.databases",
+          "group": "navigation@1"
+        },
+        {
+          "command": "liteforge.compareDatabases",
+          "when": "view == liteforge.databases",
+          "group": "navigation@2"
+        },
+        {
+          "command": "liteforge.refreshDatabases",
+          "when": "view == liteforge.databases",
+          "group": "navigation@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "LiteForge",
+      "properties": {
+        "liteforge.defaultPageSize": {
+          "type": "number",
+          "default": 100,
+          "description": "Default number of rows per page in the table grid (max 1000)."
+        },
+        "liteforge.polarOrganizationId": {
+          "type": "string",
+          "default": "c9b3a57f-c07f-4f81-b9b8-aa9f5b497a1e",
+          "description": "Polar.sh Organization ID for optional Pro license validation."
+        },
+        "liteforge.polarCheckoutUrl": {
+          "type": "string",
+          "default": "https://buy.polar.sh/polar_cl_evSGX7ncQzq8ajjg2Jecr1Mwm8IHGVYwW7mNC3QEvGc",
+          "description": "Checkout URL opened when upgrading to LiteForge Pro."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit && tsc -p webview/tsconfig.json --noEmit",
+    "build:ext": "node esbuild.config.mjs",
+    "build:webview": "vite build --config webview/vite.config.ts",
+    "build": "npm run build:ext && npm run build:webview",
+    "test": "vitest run",
+    "package": "vsce package --no-dependencies -o ../dist-packages/liteforge-1.0.0.vsix"
+  },
+  "dependencies": {
+    "sql.js": "^1.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/sql.js": "^1.4.9",
+    "@types/vscode": "^1.90.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vscode/vsce": "^3.3.2",
+    "esbuild": "^0.25.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5"
+  }
+}

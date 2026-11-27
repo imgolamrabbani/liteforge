@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1280px; height: 640px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    background: radial-gradient(circle at 18% 20%, #1E1B4B 0%, #0B1020 55%, #060913 100%);
+    color: #F8FAFC; overflow: hidden; position: relative;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .wrap {
+    position: relative; z-index: 2; display: flex; align-items: center;
+    justify-content: space-between; height: 100%; padding: 64px 72px; gap: 48px;
+  }
+  .left { max-width: 630px; }
+  .brand { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .brand-name { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #7DD3FC; font-size: 13.5px; font-weight: 700;
+    padding: 6px 14px; border-radius: 999px; margin-bottom: 20px;
+  }
+  h1 { font-size: 45px; line-height: 1.12; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 18px; }
+  h1 span {
+    background: linear-gradient(90deg, #38BDF8, #818CF8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  p.sub { font-size: 19.5px; line-height: 1.5; color: #94A3B8; margin-bottom: 28px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(148, 163, 184, 0.22);
+    color: #E2E8F0; font-size: 13.5px; font-weight: 600; padding: 8px 14px; border-radius: 8px;
+  }
+  .card {
+    width: 470px; background: #0F172A; border: 1px solid rgba(129, 140, 248, 0.32);
+    border-radius: 16px; box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65); overflow: hidden;
+  }
+  .card-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; background: #1E293B; border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    font-size: 13px; color: #94A3B8; font-family: ui-monospace, monospace;
+  }
+  .status-ok { background: rgba(16, 185, 129, 0.18); color: #34D399; padding: 3px 10px; border-radius: 6px; font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; font-family: ui-monospace, monospace; font-size: 12.5px; }
+  th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid #1E293B; }
+  th { color: #7DD3FC; background: #111827; font-size: 11.5px; }
+  .null-pill { background: #334155; color: #94A3B8; padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+  .card-foot { padding: 12px 18px; background: #0B1020; display: flex; justify-content: space-between; font-size: 12.5px; color: #94A3B8; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="brand">
+        <svg width="52" height="52" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0F172A" />
+              <stop offset="100%" stop-color="#1E1B4B" />
+            </linearGradient>
+            <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38BDF8" />
+              <stop offset="100%" stop-color="#818CF8" />
+            </linearGradient>
+          </defs>
+          <rect x="10" y="10" width="236" height="236" rx="54" fill="url(#bg)" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="4" />
+          <ellipse cx="128" cy="78" rx="68" ry="24" fill="url(#accent)" />
+          <path d="M60 112 C60 126 196 126 196 112 L196 142 C196 156 60 156 60 142 Z" fill="#22D3EE" fill-opacity="0.88" />
+          <path d="M60 156 C60 170 196 170 196 156 L196 186 C196 200 60 200 60 186 Z" fill="#34D399" fill-opacity="0.92" />
+        </svg>
+        <span class="brand-name">LiteForge</span>
+      </div>
+      <div class="badge">● PURE WASM SQLITE · ZERO NATIVE BINARIES · REMOTE-SSH READY</div>
+      <h1>Zero-Dependency <span>WASM SQLite</span> Studio</h1>
+      <p class="sub">Browse, query, edit, ERD-inspect, and diff <code>.sqlite</code> &amp; <code>.db</code> files directly inside VS Code, Cursor &amp; Windsurf. No <code>libtinfo.so.5</code> or SQLite 3.41+ crashes.</p>
+      <div class="pills">
+        <span class="pill">sql.js WebAssembly</span>
+        <span class="pill">Inline SQL Diff Edit</span>
+        <span class="pill">FK ERD Inspector</span>
+        <span class="pill">2-File Schema Diff</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span>app.sqlite · users (1,240 rows)</span>
+        <span class="status-ok">WASM · 1.8ms</span>
+      </div>
+      <table>
+        <thead><tr><th>id</th><th>email</th><th>role</th><th>meta</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>ada@acme.dev</td><td style="color:#34D399">admin</td><td>{"mfa":true}</td></tr>
+          <tr><td>2</td><td>linus@acme.dev</td><td style="color:#38BDF8">editor</td><td><span class="null-pill">NULL</span></td></tr>
+          <tr><td>3</td><td>grace@acme.dev</td><td style="color:#38BDF8">viewer</td><td>BLOB [16B]</td></tr>
+          <tr><td>4</td><td>alan@acme.dev</td><td style="color:#34D399">admin</td><td>{"mfa":true}</td></tr>
+        </tbody>
+      </table>
+      <div class="card-foot">
+        <span>✓ Zero Native Binaries</span>
+        <span>100% Local Filesystem</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

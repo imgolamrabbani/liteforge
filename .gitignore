@@ -1,0 +1,18 @@
+# Secrets & local environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Build outputs
+app/dist/
+coverage/
+.vscode-test/
+
+# OS & editor artifacts
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*

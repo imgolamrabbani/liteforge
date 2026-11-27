@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 256px; height: 256px; background: transparent; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  svg { width: 256px; height: 256px; display: block; }
+</style>
+</head>
+<body>
+  <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0F172A" />
+        <stop offset="100%" stop-color="#1E1B4B" />
+      </linearGradient>
+      <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#38BDF8" />
+        <stop offset="100%" stop-color="#818CF8" />
+      </linearGradient>
+    </defs>
+    <rect x="10" y="10" width="236" height="236" rx="54" fill="url(#bg)" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="4" />
+    <!-- Top database disc -->
+    <ellipse cx="128" cy="78" rx="68" ry="24" fill="url(#accent)" />
+    <!-- Middle disc -->
+    <path d="M60 112 C60 126 196 126 196 112 L196 142 C196 156 60 156 60 142 Z" fill="#22D3EE" fill-opacity="0.88" />
+    <!-- Bottom disc -->
+    <path d="M60 156 C60 170 196 170 196 156 L196 186 C196 200 60 200 60 186 Z" fill="#34D399" fill-opacity="0.92" />
+    <!-- WASM Spark badge -->
+    <circle cx="182" cy="182" r="24" fill="#0F172A" stroke="#34D399" stroke-width="5" />
+    <path d="M182 169 L182 195 M169 182 L195 182" stroke="#34D399" stroke-width="6" stroke-linecap="round" />
+  </svg>
+</body>
+</html>

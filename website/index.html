@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiteForge — Zero-Dependency WASM SQLite Studio for VS Code</title>
+  <meta name="description" content="Pure WebAssembly SQLite studio for VS Code, Cursor & Remote-SSH. Browse, query, edit, ERD-inspect & diff .sqlite/.db files with zero native binaries." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span>⚡ LiteForge</span></a>
+      <nav class="nav-links">
+        <a class="hide-sm" href="#features">Features</a>
+        <a class="hide-sm" href="#pricing">Pricing</a>
+        <a href="docs.html">Docs</a>
+        <a href="privacy.html">Privacy</a>
+        <button id="theme-toggle" class="theme-btn" type="button">Light Mode</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="pill">● Pure WASM SQLite · Zero Native Binaries · Remote-SSH Ready</div>
+        <h1>Zero-Dependency <span class="grad">WASM SQLite</span> Studio for VS Code</h1>
+        <p class="lead">Browse, query, edit, ERD-inspect, and diff <code>.sqlite</code> &amp; <code>.db</code> files locally—with zero <code>sqlite3</code> CLI binaries, zero <code>libtinfo.so.5</code> errors, and zero SQLite 3.41+ crashes.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=caliberhttp.liteforge" target="_blank" rel="noopener">Install on VS Code Marketplace</a>
+          <a class="btn btn-secondary" href="https://open-vsx.org/extension/caliberhttp/liteforge" target="_blank" rel="noopener">Install on Open VSX</a>
+          <a class="btn btn-secondary" href="https://github.com/imgolamrabbani/liteforge/releases/tag/v1.0.0" target="_blank" rel="noopener">Download VSIX (v1.0.0)</a>
+        </div>
+        <div class="trust-note">Free Forever Core ($0) · Custom Editor for <code>.db</code> / <code>.sqlite</code> / <code>.sqlite3</code> · Zero Telemetry</div>
+      </div>
+
+      <div class="preview-card" aria-label="Interactive LiteForge SQL preview">
+        <div class="preview-tabs">
+          <button class="preview-tab active" type="button" data-snippet="query">SQL Runner</button>
+          <button class="preview-tab" type="button" data-snippet="edit">Inline Edit</button>
+          <button class="preview-tab" type="button" data-snippet="diff">Schema Diff</button>
+        </div>
+        <pre id="preview-code" class="preview-code">-- Pure WebAssembly SQLite (sql.js) · Zero Native Binaries
+-- Safe on SQLite 3.41+ &amp; Remote-SSH (no libtinfo.so.5 errors)
+
+SELECT u.id, u.email, COUNT(o.id) AS order_count
+  FROM "users" u
+  LEFT JOIN "orders" o ON o.user_id = u.id
+ GROUP BY u.id
+ ORDER BY order_count DESC
+ LIMIT 25;</pre>
+        <div class="preview-footer">
+          <span>app.sqlite · WASM Engine</span>
+          <span id="preview-status" class="status-badge">WASM Query: 1.4 ms · 25 rows returned</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <h2 class="section-title">Everything broken in legacy SQLite extensions—fixed</h2>
+      <p class="section-sub">Runs 100% in WebAssembly inside VS Code, Cursor, Windsurf, Remote-SSH, WSL, and Codespaces.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Pure WASM Engine (sql.js)</h3>
+          <p>Zero native binaries, zero <code>libtinfo.so.5</code> shared-library errors, and strict SQLite 3.41+ single-quoted introspection.</p>
+        </div>
+        <div class="card">
+          <h3>Paginated Data Grid</h3>
+          <p>Sort columns, filter rows, and inspect <code>NULL</code>, binary <code>BLOB</code> hex previews, and formatted JSON cells effortlessly.</p>
+        </div>
+        <div class="card">
+          <h3>Multi-Tab SQL Runner</h3>
+          <p>Run ad-hoc queries with execution timing (ms), row counts, clear SQL error messages, and RFC-4180 CSV/JSON export.</p>
+        </div>
+        <div class="card">
+          <h3>Transactional Inline Editor</h3>
+          <p>Stage cell updates, row inserts, and deletes, preview exact <code>BEGIN/COMMIT</code> SQL diffs, and write back atomically.</p>
+        </div>
+        <div class="card">
+          <h3>Visual Schema &amp; FK ERD</h3>
+          <p>Inspect primary keys, foreign-key relationships, and indexes in an interactive ERD graph right inside your editor.</p>
+        </div>
+        <div class="card">
+          <h3>2-File DB Diff &amp; .sql Dump</h3>
+          <p>Compare two <code>.sqlite</code> files to generate deterministic migration SQL, or export a full transactional <code>.sql</code> dump.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section">
+      <h2 class="section-title">Simple, Honest Pricing</h2>
+      <p class="section-sub">Viewing, querying, and exporting single tables to CSV/JSON are free forever. Upgrade for inline editing, ERD, 2-file DB Diff, and full <code>.sql</code> dumps.</p>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>LiteForge Free</h3>
+          <div class="price-tag">$0 <span style="font-size:1rem;font-weight:500;color:var(--muted)">Forever</span></div>
+          <div class="price-sub">No account. No native binaries. Unlimited local DBs.</div>
+          <ul class="price-list">
+            <li>✓ Custom Editor for <code>.db</code> / <code>.sqlite</code> / <code>.sqlite3</code></li>
+            <li>✓ Paginated Data Grid + <code>NULL</code>/BLOB/JSON Inspector</li>
+            <li>✓ Multi-tab SQL Query Runner</li>
+            <li>✓ Single-table RFC-4180 CSV &amp; JSON export</li>
+            <li>✓ Automatic Dark, Light &amp; High-Contrast VS Code themes</li>
+          </ul>
+          <a class="btn btn-secondary" href="https://marketplace.visualstudio.com/items?itemName=caliberhttp.liteforge" target="_blank" rel="noopener">Install Free Extension</a>
+        </div>
+
+        <div class="price-card featured">
+          <h3>LiteForge Pro</h3>
+          <div class="price-tag">$19 <span style="font-size:1rem;font-weight:500;color:var(--muted)">Early Bird · $24 Perpetual (or $5/mo)</span></div>
+          <div class="price-sub">All v1.x updates · Up to 3 personal machines · 14-day offline grace</div>
+          <ul class="price-list">
+            <li>✓ Everything in Free Forever</li>
+            <li>✓ Transactional Inline Cell/Row Editor + SQL Diff Preview</li>
+            <li>✓ Visual Schema &amp; Foreign-Key ERD Inspector</li>
+            <li>✓ 2-File SQLite Schema Diff &amp; Migration SQL Generator</li>
+            <li>✓ Full <code>.sql</code> Schema + Data Dump &amp; Multi-Table Export</li>
+          </ul>
+          <div class="cta-row" style="margin-bottom:0">
+            <a class="btn btn-primary" href="https://buy.polar.sh/polar_cl_evSGX7ncQzq8ajjg2Jecr1Mwm8IHGVYwW7mNC3QEvGc" target="_blank" rel="noopener">Get Pro ($19 Early Bird)</a>
+            <a class="btn btn-secondary" href="https://buy.polar.sh/polar_cl_ha0WLRlS412XLUtGag6MWwNYD6sLSgVncLqmM2CnVAo" target="_blank" rel="noopener">$5/mo Option</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Free ($0 Forever)</th>
+              <th>Pro ($19 Early Bird / $24 Std / $5/mo)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Pure WASM SQLite Custom Editor (<code>.db</code>, <code>.sqlite</code>, <code>.sqlite3</code>)</td><td>Full</td><td>Full</td></tr>
+            <tr><td>Paginated Data Grid, SQL Runner &amp; CSV/JSON Export</td><td>Full</td><td>Full</td></tr>
+            <tr><td>Transactional Inline Cell/Row Editor (<code>inline_edit</code>)</td><td>—</td><td>Included</td></tr>
+            <tr><td>Visual Schema &amp; Foreign-Key ERD (<code>schema_erd</code>)</td><td>—</td><td>Included</td></tr>
+            <tr><td>2-File Schema Diff &amp; Migration SQL (<code>db_diff</code>)</td><td>—</td><td>Included</td></tr>
+            <tr><td>Full <code>.sql</code> Schema + Data Dump (<code>sql_dump</code>)</td><td>—</td><td>Included</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="privacy-box">
+        <h2 style="margin-top:0">Privacy Promise: Zero Telemetry, 100% Local</h2>
+        <p style="margin-bottom:0;color:var(--muted)">LiteForge collects <strong>zero telemetry, zero analytics, and zero crash reports</strong>. Every database is opened locally in WebAssembly memory. Outbound requests occur only if you activate a Polar.sh Pro license key. <a href="privacy.html">Read full Privacy Policy →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2026 LiteForge · 100% Local-First WASM SQLite</span>
+      <div class="footer-links">
+        <a href="https://github.com/imgolamrabbani/liteforge" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/imgolamrabbani/liteforge/releases/tag/v1.0.0" target="_blank" rel="noopener">Releases</a>
+        <a href="docs.html">Documentation</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1280px; height: 800px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #14171F; color: #E2E8F0; overflow: hidden;
+  }
+  .shell { display: grid; grid-template-rows: 52px 1fr 28px; height: 800px; }
+  .topbar {
+    background: #1E293B; border-bottom: 1px solid #334155;
+    padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .pro-tag {
+    background: linear-gradient(90deg, #38BDF8, #818CF8);
+    color: #0F172A; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 4px;
+  }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 22px 24px; }
+  .panel { background: #1E293B; border: 1px solid #334155; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .panel-hdr {
+    padding: 14px 18px; background: #243247; border-bottom: 1px solid #334155;
+    display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px;
+  }
+  .diff-list { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .diff-item { background: #0F172A; border-radius: 8px; padding: 13px 15px; border-left: 4px solid #34D399; font-family: ui-monospace, monospace; font-size: 12.5px; }
+  .diff-item.warn { border-left-color: #F59E0B; }
+  .sql-code { padding: 18px; font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.65; color: #CBD5E1; background: #0B1020; flex: 1; }
+  .statusbar { background: #0F172A; border-top: 1px solid #334155; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #94A3B8; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px;font-weight:700">
+      <span>LiteForge — 2-File SQLite Schema Diff &amp; Full .sql Dump</span>
+      <span class="pro-tag">PRO</span>
+    </div>
+    <span style="color:#34D399;font-size:12.5px">Source: prod.sqlite → Target: staging.sqlite</span>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-hdr">
+        <span>Schema Diff Summary</span>
+        <span style="color:#34D399;font-size:12px">3 changes detected</span>
+      </div>
+      <div class="diff-list">
+        <div class="diff-item">
+          <div style="color:#34D399;font-weight:700">+ ADD COLUMN users.mfa_enabled</div>
+          <div style="color:#94A3B8;margin-top:4px">INTEGER NOT NULL DEFAULT 0</div>
+        </div>
+        <div class="diff-item">
+          <div style="color:#38BDF8;font-weight:700">+ CREATE INDEX idx_orders_user_id</div>
+          <div style="color:#94A3B8;margin-top:4px">ON "orders" ("user_id")</div>
+        </div>
+        <div class="diff-item warn">
+          <div style="color:#FBBF24;font-weight:700">+ CREATE TABLE audit_logs</div>
+          <div style="color:#94A3B8;margin-top:4px">4 columns · Primary Key: id</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr">
+        <span>Generated Migration SQL &amp; .sql Dump</span>
+        <span style="color:#94A3B8;font-size:12px">migration.sql</span>
+      </div>
+      <pre class="sql-code">-- LiteForge Deterministic Migration SQL
+BEGIN TRANSACTION;
+
+ALTER TABLE "users"
+  ADD COLUMN "mfa_enabled" INTEGER NOT NULL DEFAULT 0;
+
+CREATE INDEX "idx_orders_user_id"
+  ON "orders" ("user_id");
+
+CREATE TABLE "audit_logs" (
+  "id" INTEGER PRIMARY KEY,
+  "actor" TEXT NOT NULL,
+  "action" TEXT NOT NULL,
+  "created_at" TEXT NOT NULL
+);
+
+COMMIT;</pre>
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <span>LiteForge Pro · Local Schema Diff &amp; Full .sql Dump</span>
+    <span>Zero Cloud · Pure WASM SQLite</span>
+  </div>
+</div>
+</body>
+</html>
