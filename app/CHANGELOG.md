@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2026-11-29
+
+### Added
+- **CSV / JSON → SQLite Table Importer (Free):**
+  - New command **`LiteForge: Import CSV / JSON into SQLite Table`** (`liteforge.importData`) parses RFC-4180 CSV or JSON arrays, infers SQLite column types (`INTEGER`, `REAL`, `TEXT`), quotes identifiers safely against SQL injection, inserts transactionally via WASM `sql.js`, and writes back atomically.
+
 ## [1.0.0] - 2026-11-27
 
 ### Added

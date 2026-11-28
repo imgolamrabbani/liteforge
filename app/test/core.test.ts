@@ -6,6 +6,12 @@ import {
   formatCellForDisplay,
   formatSqlLiteral,
 } from '../src/core/cellFormatter';
+import {
+  importCsvIntoSqlite,
+  importJsonIntoSqlite,
+  parseJsonArray,
+  parseRfc4180Csv,
+} from '../src/core/dataImporter';
 import { exportTableCsv, exportTableJson } from '../src/core/tableExporter';
 import { SqliteWasmDatabase, quoteIdent } from '../src/core/wasmEngine';
 
@@ -104,5 +110,79 @@ describe('Core: SqliteWasmDatabase (real .sqlite WASM round-trip)', () => {
     } finally {
       await fs.rm(tmp, { recursive: true, force: true });
     }
+  });
+});
+
+describe('Core: dataImporter (CSV / JSON -> SQLite table with type inference)', () => {
+  it('imports RFC-4180 quoted CSV with embedded commas/quotes/newlines, infers INTEGER/REAL/TEXT/NULL, and writes atomically', async () => {
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'liteforge-import-csv-'));
+    const dbPath = path.join(tmp, 'imported.sqlite');
+    try {
+      const csv = [
+        'id,price,label,note',
+        '1,19.99,"Widget, ""Pro""","line1\nline2"',
+        '2,42,"Basic",',
+      ].join('\r\n');
+
+      const engine = await SqliteWasmDatabase.openBytes(undefined, dbPath);
+      try {
+        const res = await importCsvIntoSqlite(engine, 'products', csv, dbPath);
+        expect(res.rowCount).toBe(2);
+        expect(res.columnCount).toBe(4);
+        expect(res.inferredTypes).toEqual({
+          id: 'INTEGER',
+          price: 'REAL',
+          label: 'TEXT',
+          note: 'TEXT',
+        });
+      } finally {
+        engine.close();
+      }
+
+      // Reopen from disk to verify atomic write-back
+      const reopened = await SqliteWasmDatabase.openFile(dbPath);
+      try {
+        const q = reopened.runSql('SELECT id, price, label, note FROM products ORDER BY id');
+        expect(q.rows).toEqual([
+          [1, 19.99, 'Widget, "Pro"', 'line1\nline2'],
+          [2, 42, 'Basic', null],
+        ]);
+      } finally {
+        reopened.close();
+      }
+    } finally {
+      await fs.rm(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it('imports JSON array with SQL-injection-safe table/column quoting and nested objects', async () => {
+    const json = JSON.stringify([
+      { 'user"id': 10, score: 98.5, active: true, meta: { role: 'admin' } },
+      { 'user"id': 20, score: 75.0, active: false, meta: null },
+    ]);
+
+    const engine = await SqliteWasmDatabase.openBytes();
+    try {
+      const tableName = 'evil"; DROP TABLE sqlite_master; --';
+      const res = await importJsonIntoSqlite(engine, tableName, json);
+      expect(res.rowCount).toBe(2);
+      expect(res.inferredTypes['user"id']).toBe('INTEGER');
+      expect(res.inferredTypes.score).toBe('REAL');
+      expect(res.inferredTypes.active).toBe('INTEGER');
+      expect(res.inferredTypes.meta).toBe('TEXT');
+
+      const tables = engine.listTables();
+      expect(tables.some((t) => t.name === tableName)).toBe(true);
+    } finally {
+      engine.close();
+    }
+  });
+
+  it('rejects empty or malformed CSV / JSON inputs cleanly', () => {
+    expect(() => parseRfc4180Csv('   ')).toThrow(/empty/i);
+    expect(() => parseRfc4180Csv('a,b\n"unterminated')).toThrow(/unterminated/i);
+    expect(() => parseJsonArray('{bad json')).toThrow(/Invalid JSON/);
+    expect(() => parseJsonArray('[]')).toThrow(/non-empty array/);
+    expect(() => parseJsonArray('[1, 2, 3]')).toThrow(/plain object/);
   });
 });

@@ -2,7 +2,7 @@
   "name": "liteforge",
   "displayName": "LiteForge — Zero-Dependency WASM SQLite Studio",
   "description": "Zero-dependency WebAssembly SQLite Studio for VS Code, Remote-SSH, WSL & Codespaces. Browse, query, edit, inspect FK ERDs, diff schemas & dump .sqlite/.db files locally with zero native binaries.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "caliberhttp",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -87,6 +87,12 @@
         "icon": "$(database)"
       },
       {
+        "command": "liteforge.importData",
+        "title": "Import CSV / JSON into SQLite Table",
+        "category": "LiteForge",
+        "icon": "$(cloud-upload)"
+      },
+      {
         "command": "liteforge.refreshDatabases",
         "title": "Refresh Databases",
         "category": "LiteForge",
@@ -160,7 +166,7 @@
     "build:webview": "vite build --config webview/vite.config.ts",
     "build": "npm run build:ext && npm run build:webview",
     "test": "vitest run",
-    "package": "vsce package --no-dependencies -o ../dist-packages/liteforge-1.0.0.vsix"
+    "package": "vsce package --no-dependencies -o ../dist-packages/liteforge-1.1.0.vsix"
   },
   "dependencies": {
     "sql.js": "^1.13.0"

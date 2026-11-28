@@ -1,5 +1,12 @@
 import * as vscode from 'vscode';
+import fs from 'node:fs/promises';
 import os from 'node:os';
+import path from 'node:path';
+import {
+  importCsvIntoSqlite,
+  importJsonIntoSqlite,
+} from './core/dataImporter';
+import { SqliteWasmDatabase } from './core/wasmEngine';
 import {
   FeatureGate,
   LicenseManager,
@@ -108,6 +115,62 @@ export function activate(context: vscode.ExtensionContext): void {
           'vscode.openWith',
           picked[0],
           SqliteEditorProvider.viewType
+        );
+      }
+    }),
+
+    vscode.commands.registerCommand('liteforge.importData', async () => {
+      const dataPicked = await vscode.window.showOpenDialog({
+        canSelectMany: false,
+        filters: { 'CSV or JSON Data': ['csv', 'json'] },
+        openLabel: 'Select CSV or JSON File to Import',
+      });
+      const dataUri = dataPicked?.[0];
+      if (!dataUri) return;
+
+      const dbPicked = await vscode.window.showOpenDialog({
+        canSelectMany: false,
+        filters: {
+          'SQLite Databases': ['db', 'sqlite', 'sqlite3', 'db3', 's3db'],
+        },
+        openLabel: 'Select Target SQLite Database',
+      });
+      const dbUri = dbPicked?.[0];
+      if (!dbUri) return;
+
+      const defaultTable = path
+        .basename(dataUri.fsPath, path.extname(dataUri.fsPath))
+        .replace(/[^a-zA-Z0-9_]+/g, '_');
+      const tableName = await vscode.window.showInputBox({
+        prompt: 'Target SQLite table name',
+        value: defaultTable || 'imported_table',
+        ignoreFocusOut: true,
+      });
+      if (!tableName) return;
+
+      try {
+        const raw = await fs.readFile(dataUri.fsPath, 'utf8');
+        const engine = await SqliteWasmDatabase.openFile(dbUri.fsPath);
+        try {
+          const isJson = dataUri.fsPath.toLowerCase().endsWith('.json');
+          const res = isJson
+            ? await importJsonIntoSqlite(engine, tableName, raw, dbUri.fsPath)
+            : await importCsvIntoSqlite(engine, tableName, raw, dbUri.fsPath);
+          dbTree.refresh();
+          await vscode.commands.executeCommand(
+            'vscode.openWith',
+            dbUri,
+            SqliteEditorProvider.viewType
+          );
+          void vscode.window.showInformationMessage(
+            `Imported ${res.rowCount} row(s) (${res.columnCount} columns) into table "${res.tableName}".`
+          );
+        } finally {
+          engine.close();
+        }
+      } catch (err) {
+        void vscode.window.showErrorMessage(
+          `Import failed: ${err instanceof Error ? err.message : String(err)}`
         );
       }
     }),

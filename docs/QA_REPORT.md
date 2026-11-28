@@ -85,3 +85,25 @@ Verified all 4 `ProFeatureId` capabilities are enforced via `featureGate.require
 ## Final Gatekeeper Verdict
 
 **APPROVED FOR LAUNCH.** Product #3 (**LiteForge** `caliberhttp.liteforge` v1.0.0) passed 100% of automated QA, Pro feature gating, WASM VSIX policy, live Polar.sh wiring, PNG asset, and storefront checks with **0 defects**.
+
+---
+
+## Cycle 11 Audit Addendum — LiteForge `v1.1.0` (CSV / JSON → SQLite Table Importer)
+
+**Date:** 2026-11-29  
+**Artifact Audited:** `products/liteforge/dist-packages/liteforge-1.1.0.vsix`  
+**Verdict:** **PASS (0 Defects)**
+
+- **Typecheck & Automated Tests (`products/liteforge/app/`):**
+  - `npm run typecheck` (`tsc --noEmit && tsc -p webview/tsconfig.json --noEmit`): **0 errors** (`strict: true`).
+  - `npm test` (Vitest v3.2.7): **3/3 test files passed, 24/24 tests passed** (`licensing.test.ts`: 16, `core.test.ts`: 6 including CSV/JSON importer & type inference tests, `pro.test.ts`: 2) in 1.07s.
+  - Static scan on `app/src/core/dataImporter.ts` and `app/src/extension.ts`: **0** stubs / `TODO:` / `FIXME:` / `console.log` / `child_process` / `better-sqlite3`.
+- **VSIX Package & Live Polar.sh Wiring (`products/liteforge/dist-packages/liteforge-1.1.0.vsix`):**
+  - **Archive Size:** `469 KB` (13 files, 1,062,546 bytes uncompressed, `< 2 MB`).
+  - **WASM Bundled:** `extension/dist/sql-wasm.wasm` (`688,280 bytes`) verified inside archive.
+  - **Bundle Hygiene:** Zero `node_modules/`, zero `.map`, PNG-only extension icon (`media/icon.png`), zero `.svg` or `http://` in `extension/readme.md`.
+  - **Manifest Verification (`extension/package.json`):**
+    - `version`: `"1.1.0"`
+    - Command `liteforge.importData` registered
+    - Live Polar Org ID preserved: `c9b3a57f-c07f-4f81-b9b8-aa9f5b497a1e`
+    - Live Polar Checkout URL preserved: `https://buy.polar.sh/polar_cl_evSGX7ncQzq8ajjg2Jecr1Mwm8IHGVYwW7mNC3QEvGc`

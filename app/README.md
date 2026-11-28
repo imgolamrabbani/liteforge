@@ -11,7 +11,7 @@ Built on pure WebAssembly (`sql.js`), LiteForge requires **zero native `sqlite3`
 | Custom Editor for `.db`, `.sqlite`, `.sqlite3`, `.db3`, `.s3db` | Included | Included |
 | Paginated Table Grid (Sort, Search, `NULL` / BLOB Hex / JSON Inspector) | Included | Included |
 | Multi-Tab SQL Query Runner with timing & error reporting | Included | Included |
-| Single-Table RFC-4180 CSV & Formatted JSON Export | Included | Included |
+| Single-Table RFC-4180 CSV & JSON Export + **CSV / JSON Table Importer** | Included | Included |
 | **Transactional Inline Cell/Row Editor** (SQL diff preview + atomic write-back) | — | Included |
 | **Visual Schema & Foreign-Key ERD Inspector** | — | Included |
 | **Local 2-File SQLite Schema Diff & Migration SQL Generator** | — | Included |
